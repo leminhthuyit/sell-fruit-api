@@ -12,9 +12,14 @@ const createProduct = async (req, res) => {
     });
     const saveImage = await image.save();
 
+    const resultImg = {
+      _id: saveImage._id,
+      url: `${ulrBase}/api/images/${saveImage.filename}`,
+    };
+
     const product = new Product({
       ...req.body,
-      imageUrl: `${ulrBase}/api/images/${saveImage.filename}`,
+      image: resultImg,
     });
     const saveProduct = await product.save();
     res

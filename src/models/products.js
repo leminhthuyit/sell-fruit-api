@@ -10,10 +10,6 @@ const ProductSchema = Schema({
     type: Schema.Types.ObjectId,
     required: [true, "Product category does not exist"],
   },
-  supplier_id: {
-    type: Number,
-    required: [true, "product supplier does not exist"],
-  },
   price: {
     type: Number,
     required: [true, "Please enter product price"],
@@ -24,7 +20,14 @@ const ProductSchema = Schema({
     required: false,
     default: "",
   },
-  imageUrl: String,
+  image: {
+    _id: Schema.Types.ObjectId,
+    url: String,
+  },
+  quantitySold: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const Product = model("Products", ProductSchema);

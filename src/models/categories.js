@@ -12,6 +12,10 @@ const CategorySchema = Schema({
     required: false,
     default: "",
   },
+  image: {
+    _id: Schema.Types.ObjectId,
+    url: String,
+  },
 });
 
 const Category = model("Categories", CategorySchema);

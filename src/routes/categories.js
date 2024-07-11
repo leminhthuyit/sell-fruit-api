@@ -6,10 +6,11 @@ const {
   updateCategory,
   deleteCategory,
 } = require("../controllers/categories");
+const upload = require("../configs/storageEngine");
 
 const router = express.Router();
 
-router.post("/", createCategory);
+router.post("/", upload.single("image"), createCategory);
 router.get("/", getAllCategory);
 router.get("/:id", getCategoryById);
 router.put("/:id", updateCategory);

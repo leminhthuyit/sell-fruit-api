@@ -1,8 +1,26 @@
 const Category = require("../models/categories");
+const Image = require("../models/image");
+
+const ulrBase = process.env.URL_BASE || "http://localhost:8080";
 
 const createCategory = async (req, res) => {
   try {
-    const category = new Category(req.body);
+    const image = new Image({
+      filename: req.file.originalname,
+      contentType: req.file.mimetype,
+      data: req.file.buffer,
+    });
+    const saveImage = await image.save();
+
+    const resultImg = {
+      _id: saveImage._id,
+      url: `${ulrBase}/api/images/${saveImage.filename}`,
+    };
+
+    const category = new Category({
+      ...req.body,
+      image: resultImg,
+    });
     await category.save();
     res
       .status(200)
@@ -14,7 +32,7 @@ const createCategory = async (req, res) => {
 
 const getAllCategory = async (req, res) => {
   try {
-    const categorys = await Category.find({});
+    const categorys = await Category.find();
     res.status(200).json({ data: categorys });
   } catch (error) {
     res.status(500).json({ message: error.message });
