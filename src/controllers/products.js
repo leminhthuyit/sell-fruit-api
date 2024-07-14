@@ -84,9 +84,19 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+const getSellingProducts = async (req, res) => {
+  try {
+    const products = await Product.find().sort({ quantitySold: -1 });
+    res.status(200).json({ data: products });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
+  getSellingProducts,
   getProductById,
   updateProduct,
   deleteProduct,
