@@ -23,7 +23,7 @@ connectDB(process.env.MONGODB_URI);
 app.use("/api", routes);
 
 app.get("/", async (req, res) => {
-  res.send("API Ecommerce");
+  res.send("Welcome API Ecommerce");
 });
 
 module.exports = app;
