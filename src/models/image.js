@@ -15,6 +15,10 @@ const imageSchema = Schema({
     type: Buffer,
     required: true,
   },
+  createTime: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 const Image = model("Image", imageSchema);

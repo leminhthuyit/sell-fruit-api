@@ -4,7 +4,6 @@ const dotenv = require("dotenv");
 const connectDB = require("./configs/connect");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const crypto = require("crypto");
 
 dotenv.config();
 

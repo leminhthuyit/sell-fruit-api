@@ -16,6 +16,10 @@ const CategorySchema = Schema({
     _id: Schema.Types.ObjectId,
     url: String,
   },
+  createTime: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 const Category = model("Categories", CategorySchema);

@@ -1,7 +1,9 @@
 const Image = require("../models/image");
 const Product = require("../models/products");
+const dotenv = require("dotenv");
+dotenv.config();
 
-const ulrBase = process.env.URL_BASE || "http://localhost:8080";
+const ulrBase = process.env.URL_BASE || "https://sell-fruit-api.vercel.app";
 
 const createProduct = async (req, res) => {
   try {
@@ -17,10 +19,14 @@ const createProduct = async (req, res) => {
       url: `${ulrBase}/api/images/${saveImage.filename}`,
     };
 
+    const parseSale = req.body.sale ? JSON.parse(req.body.sale) : null;
+
     const product = new Product({
       ...req.body,
+      sale: parseSale,
       image: resultImg,
     });
+
     const saveProduct = await product.save();
     res
       .status(200)
@@ -54,9 +60,15 @@ const getProductById = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
+  const { id } = req.params;
+
+  const parseSale = req.body.sale ? JSON.parse(req.body.sale) : null;
+
   try {
-    const { id } = req.params;
-    const product = await Product.findByIdAndUpdate(id, req.body);
+    const product = await Product.findByIdAndUpdate(id, {
+      ...req.body,
+      sale: parseSale,
+    });
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -86,7 +98,18 @@ const deleteProduct = async (req, res) => {
 
 const getSellingProducts = async (req, res) => {
   try {
-    const products = await Product.find().sort({ quantitySold: -1 });
+    const products = await Product.find().limit(8).sort({ quantitySold: -1 });
+    res.status(200).json({ data: products });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getPrommotionProducts = async (req, res) => {
+  try {
+    const products = await Product.find({ isSale: true })
+      .limit(6)
+      .sort({ discount: -1 });
     res.status(200).json({ data: products });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -100,4 +123,5 @@ module.exports = {
   getProductById,
   updateProduct,
   deleteProduct,
+  getPrommotionProducts,
 };
